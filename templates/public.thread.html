@@ -1,0 +1,80 @@
+{{ define "content" }}
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <span class="lead"> <i class="fa fa-comment-o"></i> {{ .Topic }} </span>
+  </div>
+  <div class="panel-body">
+    <img class="img" src="/static/images/{{ .ImageNameByThread }}" onerror="this.style.display='none'">
+    <div class="fa pull-left">
+      Started by <a style="color: blue; font-size: 11pt;"> {{ .User.Name }} </a> | {{ .CreatedAtDate }} | {{ .NumReplies }} comments.
+    </div>
+    <form role="form" action="/thread/dislike" method="post">
+      <input type="hidden" name="uuid" value="{{ .Uuid }}">
+      <div class="fa-lg pull-right"> 
+        <button class="fa fa-arrow-circle-down" type="submit" style="background:none; border-width:0px; color:rgb(125, 0, 0);">
+        </button>{{ .NumDislikesThread }} </div>
+    </form>
+    <form role="form" action="/thread/like" method="POST">
+      <input type="hidden" name="uuid" value="{{ .Uuid }}">
+      <div class="fa-lg pull-right">
+        <button class="fa fa-arrow-circle-up" type="submit" style="background:none; border-width:0px; color:rgb(55, 125, 0);">
+        </button>{{ .NumLikesThread }} </div>
+    </form>
+    <br>
+    <div class="fa pull-left">
+      Categories: {{ .Categories }}
+    </div>
+  </div>
+</div>
+
+
+
+<!-- <div class="panel panel-default">
+  <div class="panel-heading">
+    <span class="lead"> <i class="fa fa-comment-o"></i> {{ .Topic }}</span>
+    <div class="pull-right">
+      Started by {{ .User.Name }} - {{ .CreatedAtDate }}
+      <form role="form" action="/thread/like" method="POST">
+        <input type="hidden" name="uuid" value="{{ .Uuid }}">
+        <div class="fa pull-right">
+          <button class="fa-arrow-circle-up" type="submit" style="background:none; border-width:0px; color:rgb(0, 155, 255);">
+          </button>{{ .NumLikesThread }} </div>
+      </form>
+      <form role="form" action="/thread/dislike" method="post">
+        <input type="hidden" name="uuid" value="{{ .Uuid }}">
+        <div class="fa pull-right"> 
+          <button class="fa-arrow-circle-down" type="submit" style="background:none; border-width:0px; color:rgb(0, 155, 255);">
+          </button>{{ .NumDislikesThread }} </div>
+      </form>
+    </div>
+  </div> -->
+  
+  {{ range .Posts }}
+  <div class="panel panel-body">
+    <span class="lead"> <i class="fa fa-comment"></i> {{ .Body }}</span>
+    <div class="pull-right">
+      <br>
+      <form class="pull-right" role="form" action="/post/dislike" method="post">
+        <input type="hidden" name="uuid" value="{{ .Uuid }}">
+        <input type="hidden" name="url" value="/thread/read?id={{ .ThreadUUIDbyPostUUID }}">
+        <div class="fa-lg pull-right"> 
+          <button class="fa fa-arrow-circle-down" type="submit" style="background:none; border-width:0px; color:rgb(125, 0, 0);">
+          </button>{{ .NumDislikesPost}} </div>
+      </form>
+      <form class="pull-right" role="form" action="/post/like" method="POST">
+        <input type="hidden" name="uuid" value="{{ .Uuid }}">
+        <input type="hidden" name="url" value="/thread/read?id={{ .ThreadUUIDbyPostUUID }}">
+        <div class="fa-lg pull-right">
+          <button class="fa fa-arrow-circle-up" type="submit" style="background:none; border-width:0px; color:rgb(55, 125, 0);">
+          </button>{{ .NumLikesPost }} </div>
+      </form><br>
+      <div class="fa pull-right">
+        on {{ .CreatedAtDate }} by <a style="color: blue; font-size: 11pt;"> {{ .User.Name }} </a>
+      </div>
+    </div>    
+  </div>
+  {{ end }}    
+
+
+{{ end }}

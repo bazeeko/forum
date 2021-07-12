@@ -1,0 +1,66 @@
+{{ define "content" }}
+<div class="panel panel-body">
+<form id="sectionForm" role="form" action="/thread/create" enctype="multipart/form-data" method="post">
+  <div class="lead" style="color: midnightblue;">Start a new thread with the following topic</div>
+  <div class="fa">
+    <input type="checkbox" name="category1" value="C/C++"> C/C++<br>
+    <input type="checkbox" name="category2" value="Java"> Java<br>
+    <input type="checkbox" name="category3" value="PHP"> PHP<br>
+    <input type="checkbox" name="category4" value="Python"> Python<br>
+    <input type="checkbox" name="category5" value="JavaScript"> JavaScript<br><br>
+  </div>
+  <hr style="border: 2px solid #363f57;">
+  <input type="file" class="custom-file-input" id="img" name="img" accept=".png, .jpg, .jpeg, .gif">
+  <div class="form-group">
+    <textarea class="form-control" name="topic" id="topic" placeholder="Thread topic here" rows="4" required autofocus></textarea>
+    <br/>
+    <br/>
+    <button class="btn btn-lg btn-primary pull-right" type="submit" onclick="send()">Start this thread</button>
+  </div>
+</form>
+</div>
+<script>
+  (function() {
+    const form = document.querySelector('#sectionForm');
+    const checkboxes = form.querySelectorAll('input[type=checkbox]');
+    const checkboxLength = checkboxes.length;
+    const firstCheckbox = checkboxLength > 0 ? checkboxes[0] : null;
+
+    function init() {
+        if (firstCheckbox) {
+            for (let i = 0; i < checkboxLength; i++) {
+                checkboxes[i].addEventListener('change', checkValidity);
+            }
+
+            checkValidity();
+        }
+    }
+
+    function isChecked() {
+        for (let i = 0; i < checkboxLength; i++) {
+            if (checkboxes[i].checked) return true;
+        }
+
+        return false;
+    }
+
+    function checkValidity() {
+        const errorMessage = !isChecked() ? 'At least one checkbox must be selected.' : '';
+        firstCheckbox.setCustomValidity(errorMessage);
+    }
+
+    init();
+})();
+</script>
+<!-- <script>
+const send = () => {
+  let categories = document.getElementsByClassName("category")
+  let request = {
+    categories: categories
+  }
+
+  fetch("/thread/create", {method: 'POST', body: JSON.parse(request)})
+}
+</script> -->
+
+{{ end }}

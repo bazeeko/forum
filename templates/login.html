@@ -1,0 +1,18 @@
+{{ define "content" }}
+
+<form class="form-signin panel panel-title center" role="form" action="/authenticate" method="post" style="padding-bottom: 60px;">
+  <h2 class="form-signin-heading">
+    <i class="fa fa-paper-plane panel panel-footer" style="color: dodgerblue;">
+      CodeForum
+    </i>
+  </h2>
+  <input type="email" name="email" class="form-control" placeholder="Email address" pattern="^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$"
+  title="Enter a valid email" required autofocus>
+  <input type="password" name="password" class="form-control" placeholder="Password" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}"
+  title="A password must contain at least 1 lowercase letter 1 uppercase letter, and 1 digit" required>
+  <br/>
+  <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+  <br/>
+  <a class="lead pull-right" href="/signup" style="color: dodgerblue;">Sign up</a>
+</form>
+{{ end }}

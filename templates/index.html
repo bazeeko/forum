@@ -1,0 +1,104 @@
+{{ define "content" }}
+<p class="lead">
+  <a href="/thread/new" style="color: navy;">Start a thread</a> <h style="color: rgb(229, 235, 231);">or join one below!</h> 
+</p>
+<div class="panel panel-body" style="background-color:  rgb(241, 235, 219);">
+<form class="pull-left" action="/filter/created" method="post">
+  <input type="hidden" name="type" value="created">
+  <button class="btn btn-lg">My threads</button>
+</form>
+
+<form class="pull-left" action="/filter/liked" method="post">
+  <input type="hidden" name="type" value="liked">
+  <button class="btn btn-lg">My liked threads</button>
+</form><br><br><br>
+
+<form role="form" id="sectionForm" action="/filter/category" method="post" class="panel panel-body">
+  <div class="lead">Choose the categories to filter by</div>
+  <div class="fa">
+    <input type="hidden" name="type" value="category">
+    <input type="checkbox" name="category1" value="C/C++"> C/C++<br>
+    <input type="checkbox" name="category2" value="Java"> Java<br>
+    <input type="checkbox" name="category3" value="PHP"> PHP<br>
+    <input type="checkbox" name="category4" value="Python"> Python<br>
+    <input type="checkbox" name="category5" value="JavaScript"> JavaScript<br><br>
+  </div>
+  <div class="form-group">
+    <button class="btn btn-lg btn-primary pull-right" type="submit" onclick="send()">Filter by categories</button>
+  </div>
+</form>
+</div>
+
+<div class="panel panel-body" style="background-color: rgb(241, 235, 219);">
+
+{{ range . }}
+ 
+  <div class="panel panel-default">
+    <div class="panel-heading" onclick="window.location='/thread/read?id={{.Uuid }}';"  style="cursor: pointer;">
+      <span class="lead"> <i class="fa fa-comment-o"></i> {{ .Topic }} </span>
+      
+    </div>
+    <div class="panel-body">
+      <img src="/static/images/{{ .ImageNameByThread }}" onerror="this.style.display='none'">
+      <div class="fa pull-left">
+        Started by <a style="color: blue; font-size: 11pt;"> {{ .User.Name }} </a> | {{ .CreatedAtDate }} | {{ .NumReplies }} comments.
+      </div>
+      <form role="form" action="/thread/dislike" method="post">
+        <input type="hidden" name="uuid" value="{{ .Uuid }}">
+        <input type="hidden" name="url" value="/">
+        <div class="fa-lg pull-right"> 
+          <button class="fa fa-arrow-circle-down" type="submit" style="background:none; border-width:0px; color:rgb(125, 0, 0);">
+          </button>{{ .NumDislikesThread }} </div>
+      </form>
+      <form role="form" action="/thread/like" method="POST">
+        <input type="hidden" name="uuid" value="{{ .Uuid }}">
+        <input type="hidden" name="url" value="/">
+        <div class="fa-lg pull-right">
+          <button class="fa fa-arrow-circle-up" type="submit" style="background:none; border-width:0px; color:rgb(55, 125, 0);">
+          </button>{{ .NumLikesThread }} </div>
+      </form><br>
+      <div class="fa pull-left">
+        Categories: {{ .Categories }}
+      </div>
+    </div>
+  </div>
+  
+{{ end }}
+
+</div>
+
+<script>
+  (function() {
+    const form = document.querySelector('#sectionForm');
+    const checkboxes = form.querySelectorAll('input[type=checkbox]');
+    const checkboxLength = checkboxes.length;
+    const firstCheckbox = checkboxLength > 0 ? checkboxes[0] : null;
+
+    function init() {
+        if (firstCheckbox) {
+            for (let i = 0; i < checkboxLength; i++) {
+                checkboxes[i].addEventListener('change', checkValidity);
+            }
+
+            checkValidity();
+        }
+    }
+
+    function isChecked() {
+        for (let i = 0; i < checkboxLength; i++) {
+            if (checkboxes[i].checked) return true;
+        }
+
+        return false;
+    }
+
+    function checkValidity() {
+        const errorMessage = !isChecked() ? 'At least one checkbox must be selected.' : '';
+        firstCheckbox.setCustomValidity(errorMessage);
+    }
+
+    init();
+})();
+</script>
+
+{{ end }}
