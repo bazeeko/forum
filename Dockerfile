@@ -7,5 +7,4 @@ ENV TZ=Asia/Almaty
 RUN go build
 CMD ["/app/forum"]
 
-
 EXPOSE 8080

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"time"
+	"os"
 )
 
 func main() {
@@ -45,12 +45,16 @@ func main() {
 	// mux.HandleFunc("/image/upload", HandleUpload)
 
 	// starting up the server
-	server := &http.Server{
-		Addr:           config.Address,
-		Handler:        mux,
-		ReadTimeout:    time.Duration(config.ReadTimeout * int64(time.Second)),
-		WriteTimeout:   time.Duration(config.WriteTimeout * int64(time.Second)),
-		MaxHeaderBytes: 1 << 20,
+	// server := &http.Server{
+	// 	Addr:           config.Address,
+	// 	Handler:        mux,
+	// 	ReadTimeout:    time.Duration(config.ReadTimeout * int64(time.Second)),
+	// 	WriteTimeout:   time.Duration(config.WriteTimeout * int64(time.Second)),
+	// 	MaxHeaderBytes: 1 << 20,
+	// }
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
 	}
-	server.ListenAndServe()
+	http.ListenAndServe(":"+port, mux)
 }
